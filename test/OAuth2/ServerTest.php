@@ -142,27 +142,6 @@ class OAuth2_ServerTest extends PHPUnit_Framework_TestCase
         $server->addStorage($this->getMock('OAuth2_Storage_AccessTokenInterface'), 'authorization_code');
     }
 
-    public function testAddingStorageWithValidKeyOnlySetsThatKey()
-    {
-        if (version_compare(phpversion(), '5.3', '<')) {
-            // cannot run this test in 5.2
-            return;
-        }
-
-        $server = new OAuth2_Server();
-        $server->addStorage($this->getMock('OAuth2_Storage_Memory'), 'access_token');
-
-        $reflection = new ReflectionClass($server);
-        $prop = $reflection->getProperty('storages');
-        $prop->setAccessible(true);
-
-        $storages = $prop->getValue($server); // get the private "storages" property
-
-        $this->assertEquals(1, count($storages));
-        $this->assertTrue(isset($storages['access_token']));
-        $this->assertFalse(isset($storages['authorization_code']));
-    }
-
     public function testAddingResponseType()
     {
         $storage = $this->getMock('OAuth2_Storage_Memory');
